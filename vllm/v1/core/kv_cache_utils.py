@@ -453,19 +453,19 @@ def _gen_mm_extra_hash_keys(
     return extra_keys, curr_mm_idx
 
 
-def _gen_lora_extra_hash_keys(request: Request) -> list[str]:
+def _gen_lora_extra_hash_keys(request: Request) -> list[int]:
     """Generate extra keys related to LoRA for block hash computation.
 
     Args:
         request: The request object.
 
     Returns:
-        Return LoRA name of the request if it is a LoRA request. Return empty
-        list otherwise.
+        Return LoRA int id of the request if it is a LoRA request. Return
+        empty list otherwise.
     """
     if not request.lora_request:
         return []
-    return [request.lora_request.lora_name]
+    return [request.lora_request.lora_int_id]
 
 
 def _gen_prompt_embeds_extra_hash_keys(
@@ -514,7 +514,7 @@ def generate_block_hash_extra_keys(
     mm_extra_keys, new_start_mm_idx = _gen_mm_extra_hash_keys(
         request, start_token_idx, end_token_idx, start_mm_idx
     )
-    lora_extra_keys: list[str] = _gen_lora_extra_hash_keys(request)
+    lora_extra_keys: list[int] = _gen_lora_extra_hash_keys(request)
     cache_salt_keys: list[str] = (
         [request.cache_salt] if (start_token_idx == 0 and request.cache_salt) else []
     )
